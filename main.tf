@@ -79,7 +79,7 @@ resource "docker_image" "ticketea_backend_image" {
   name = "${var.dockerhub_username}/${var.dockerhub_project_name_backend}:latest"
 
   build {
-    context = "../"
+    context = "../ticketea-backend/"
   }
 }
 
