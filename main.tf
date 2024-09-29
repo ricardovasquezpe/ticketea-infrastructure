@@ -12,7 +12,6 @@ terraform {
 }
 
 locals {
-  # instance_ami    = "ami-085f9c64a9b75eed5"
   instance_ami    = "ami-00eb69d236edcfaf8"
   public_key_path = "${path.module}/ticketea-key.pub"
   userdata_path   = "${path.module}/ticketea-userdata.sh"
@@ -81,6 +80,7 @@ resource "aws_eip_association" "ticketea_elastic_ip_association" {
 
   build {
     context = "../ticketea-backend/"
+    platform   = "linux/amd64"
   }
 }
 
