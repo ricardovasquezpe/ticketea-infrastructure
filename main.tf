@@ -12,7 +12,8 @@ terraform {
 }
 
 locals {
-  instance_ami    = "ami-085f9c64a9b75eed5"
+  # instance_ami    = "ami-085f9c64a9b75eed5"
+  instance_ami    = "ami-00eb69d236edcfaf8"
   public_key_path = "${path.module}/ticketea-key.pub"
   userdata_path   = "${path.module}/ticketea-userdata.sh"
 }
@@ -25,7 +26,7 @@ provider "aws" {
 
 provider "docker" {}
 
-/*resource "aws_key_pair" "ticketea_key" {
+resource "aws_key_pair" "ticketea_key" {
   key_name   = "ticketea_key"
   public_key = file(local.public_key_path)
 }
@@ -63,7 +64,7 @@ resource "aws_instance" "ticketea_instance" {
   key_name        = aws_key_pair.ticketea_key.key_name
   user_data       = file(local.userdata_path)
 
-  depends_on = [null_resource.push_to_dockerhub]
+  # depends_on = [null_resource.push_to_dockerhub]
 }
 
 resource "aws_eip" "ticketea_elastic_ip" {
@@ -73,9 +74,9 @@ resource "aws_eip" "ticketea_elastic_ip" {
 resource "aws_eip_association" "ticketea_elastic_ip_association" {
   instance_id   = aws_instance.ticketea_instance.id
   allocation_id = aws_eip.ticketea_elastic_ip.id
-}*/
+}
 
-resource "docker_image" "ticketea_backend_image" {
+/*resource "docker_image" "ticketea_backend_image" {
   name = "${var.dockerhub_username}/${var.dockerhub_project_name_backend}:latest"
 
   build {
@@ -91,7 +92,7 @@ resource "null_resource" "push_to_dockerhub" {
   }
 
   depends_on = [docker_image.ticketea_backend_image]
-}
+}*/
 
 /*resource "aws_s3_bucket" "ticketea_bucket" {
   bucket = "ticketeabucket"
