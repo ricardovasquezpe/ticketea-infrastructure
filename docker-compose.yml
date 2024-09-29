@@ -27,7 +27,6 @@ services:
   backend:
     container_name: backend
     image: ricardovasquezpe/ticketea-backend:latest
-    platform: linux/amd64
 #    build:
 #      context: .
 #      dockerfile: Dockerfile
