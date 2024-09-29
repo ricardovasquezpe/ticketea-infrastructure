@@ -35,9 +35,9 @@ services:
       - 3000:3000
     expose:
       - 3000
-#    depends_on:
-#      mysqldb:
-#        condition: service_healthy
+    depends_on:
+      mysqldb:
+        condition: service_healthy
     environment:
       - MYSQL_HOST=mysqldb
       - MYSQL_PORT=3306
@@ -46,24 +46,24 @@ services:
       - MYSQL_PASSWORD=4Ev1dHzNfTK9GzG
     networks:
       - nodejs-mysql-network
-#  mysqldb:
+  mysqldb:
 #    image: mysql
-#    image: mysql:latest
+    image: mysql:latest
 #    command: --default-authentication-plugin=mysql_native_password
-#    ports:
-#      - 3306:3306
-#    restart: always
-#    environment:
-#      - MYSQL_DATABASE=ticketea
-#      - MYSQL_ROOT_PASSWORD=4Ev1dHzNfTK9GzG
-#    volumes:
-#      - mysql-data:/var/lib/mysql
-#    networks:
-#      - nodejs-mysql-network
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      timeout: 20s
-#      retries: 3
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      - MYSQL_DATABASE=ticketea
+      - MYSQL_ROOT_PASSWORD=4Ev1dHzNfTK9GzG
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - nodejs-mysql-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 3
 volumes:
   mysql-data:
 networks:
