@@ -48,7 +48,7 @@ echo "Start docker-compose!"
 cd home/ubuntu
 git clone https://github.com/ricardovasquezpe/ticketea-infrastructure.git
 cd ticketea-infrastructure
-docker login -u ricardovasquezpe -p Ajinomoto123@
-docker-compose up
+docker login -u ricardovasquezpe -p password
+docker-compose up -d
 
 echo "Finish docker-compose!"
