@@ -25,7 +25,7 @@ provider "aws" {
 
 provider "docker" {}
 
-resource "aws_key_pair" "ticketea_key" {
+/*resource "aws_key_pair" "ticketea_key" {
   key_name   = "ticketea_key"
   public_key = file(local.public_key_path)
 }
@@ -63,7 +63,8 @@ resource "aws_instance" "ticketea_instance" {
   key_name        = aws_key_pair.ticketea_key.key_name
   user_data       = file(local.userdata_path)
 
-  # depends_on = [null_resource.push_to_dockerhub]
+  depends_on = [null_resource.push_to_dockerhub,
+                null_resource.update_backend_env_file]
 }
 
 resource "aws_eip" "ticketea_elastic_ip" {
@@ -75,12 +76,12 @@ resource "aws_eip_association" "ticketea_elastic_ip_association" {
   allocation_id = aws_eip.ticketea_elastic_ip.id
 }
 
-/*resource "docker_image" "ticketea_backend_image" {
+resource "docker_image" "ticketea_backend_image" {
   name = "${var.dockerhub_username}/${var.dockerhub_project_name_backend}:latest"
 
   build {
-    context = "../ticketea-backend/"
-    platform   = "linux/amd64"
+    context  = "../ticketea-backend/"
+    platform = "linux/amd64"
   }
 }
 
@@ -94,7 +95,20 @@ resource "null_resource" "push_to_dockerhub" {
   depends_on = [docker_image.ticketea_backend_image]
 }*/
 
-/*resource "aws_s3_bucket" "ticketea_bucket" {
+resource "aws_s3_bucket" "ticketea_bucket" {
   bucket = "ticketeabucket"
   acl    = "private"
-}*/
+}
+
+resource "null_resource" "update_backend_env_file" {
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "\nS3_BUCKET_NAME=${aws_s3_bucket.ticketea_bucket.bucket}" >> ./.env.backend
+    EOT
+  }
+
+  # Definir que el archivo .env depende del bucket creado
+  depends_on = [
+    aws_s3_bucket.ticketea_bucket
+  ]
+}
