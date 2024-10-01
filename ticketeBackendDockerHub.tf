@@ -1,4 +1,4 @@
-resource "null_resource" "push_to_dockerhub" {
+/*resource "null_resource" "push_to_dockerhub_backend" {
   provisioner "local-exec" {
     command = <<-EOT
       docker login -u ${var.dockerhub_username} -p ${var.dockerhub_password} && docker push ${var.dockerhub_username}/${var.dockerhub_project_name_backend}:latest
@@ -34,4 +34,4 @@ resource "null_resource" "update_backend_env_file" {
     aws_s3_bucket.ticketea_bucket,
     aws_iam_access_key.ticketea_bucket_user_access_key
   ]
-}
+}*/

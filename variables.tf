@@ -27,3 +27,8 @@ variable "s3_bucket_name" {
   type      = string
   sensitive = true
 }
+
+variable "dockerhub_project_name_frontend" {
+  type      = string
+  sensitive = true
+}
