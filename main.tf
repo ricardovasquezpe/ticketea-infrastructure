@@ -13,8 +13,8 @@ terraform {
 
 locals {
   instance_ami    = "ami-00eb69d236edcfaf8"
-  public_key_path = "${path.module}/ticketea-key.pub"
-  userdata_path   = "${path.module}/ticketea-userdata.sh"
+  public_key_path = "${path.module}/resources/ticketea-key.pub"
+  userdata_path   = "${path.module}/resources/ticketea-userdata.sh"
   aws_region      = "us-east-2"
 }
 
