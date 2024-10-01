@@ -63,8 +63,7 @@ resource "aws_instance" "ticketea_instance" {
   key_name        = aws_key_pair.ticketea_key.key_name
   user_data       = file(local.userdata_path)
 
-  depends_on = [null_resource.push_to_dockerhub,
-                null_resource.update_backend_env_file]
+  depends_on = [null_resource.push_to_dockerhub]
 }
 
 resource "aws_eip" "ticketea_elastic_ip" {

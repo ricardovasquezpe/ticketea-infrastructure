@@ -47,13 +47,13 @@ resource "aws_s3_bucket_policy" "ticketea_bucket_policy" {
   depends_on = [aws_s3_bucket_public_access_block.ticketea_bucket_allow_public_access]
 }
 
-resource "aws_iam_user" "ticketea-bucket-user" {
+resource "aws_iam_user" "ticketea_bucket_user" {
   name = "${var.s3_bucket_name}-user"
 }
 
-resource "aws_iam_user_policy" "ticketea-bucket-user-policy" {
+resource "aws_iam_user_policy" "ticketea_bucket_user_policy" {
   name = "${var.s3_bucket_name}-user-policy"
-  user = aws_iam_user.ticketea-bucket-user.name
+  user = aws_iam_user.ticketea_bucket_user.name
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -64,4 +64,8 @@ resource "aws_iam_user_policy" "ticketea-bucket-user-policy" {
       },
     ]
   })
+}
+
+resource "aws_iam_access_key" "ticketea_bucket_user_access_key" {
+  user = aws_iam_user.ticketea_bucket_user.name
 }
