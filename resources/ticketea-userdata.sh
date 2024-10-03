@@ -2,35 +2,44 @@
 sudo apt update
 sudo apt upgrade -y
 
-sudo apt install -y ca-certificates curl gnupg lsb-release
+sudo apt install -y curl unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws sts get-caller-identity
 
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id ticketea-secrets-test --query publicIp --output text --region us-east-2)
+echo "El valor del secreto es: $SECRET_VALUE"
 
-sudo echo  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
+#sudo apt install -y ca-certificates curl gnupg lsb-release
 
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+#sudo mkdir -p /etc/apt/keyrings
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-echo "Installed!"
+#sudo echo  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+#sudo apt update
 
-sudo usermod -aG docker ubuntu
-su -s ubuntu
-sudo chmod 666 /var/run/docker.sock
-sudo systemctl restart docker
+#sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-curl -SL https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-docker-compose --version
+#echo "Installed!"
 
-echo "Finished!"
+#sudo usermod -aG docker ubuntu
+#su -s ubuntu
+#sudo chmod 666 /var/run/docker.sock
+#sudo systemctl restart docker
 
-echo "Start docker-compose!"
+#curl -SL https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+#sudo chmod +x /usr/local/bin/docker-compose
+#docker-compose --version
 
-cd home/ubuntu
-git clone https://github.com/ricardovasquezpe/ticketea-infrastructure.git
-cd ticketea-infrastructure/resources
-docker login -u ricardovasquezpe -p Ajinomoto123@
-docker-compose up -d
+#echo "Finished!"
 
-echo "Finish docker-compose!"
+#echo "Start docker-compose!"
+
+#cd home/ubuntu
+#git clone https://github.com/ricardovasquezpe/ticketea-infrastructure.git
+#cd ticketea-infrastructure/resources
+#docker login -u ricardovasquezpe -p Ajinomoto123@
+#docker-compose up -d
+
+#echo "Finish docker-compose!"
