@@ -53,6 +53,7 @@ ACCESSSECRET=$(echo $SECRET_JSON | jq -r '.accessSecret')
 REGION=$(echo $SECRET_JSON | jq -r '.region')
 
 sudo su
+echo "" >> >> .env.backend
 echo "AWS_S3_BUCKET_NAME=$BUCKETNAME" >> .env.backend
 echo "AWS_ACCESS_KEY=$ACCESSKEY" >> .env.backend
 echo "AWS_ACCESS_SECRET=$ACCESSSECRET" >> .env.backend
