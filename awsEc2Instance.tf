@@ -42,6 +42,7 @@ resource "aws_instance" "ticketea_instance" {
   instance_type   = "t2.micro"
   key_name        = aws_key_pair.ticketea_key.key_name
   user_data       = file(local.userdata_path)
+  iam_instance_profile = aws_iam_instance_profile.ticketea_ec2_profile.name
 
   //depends_on = [null_resource.push_to_dockerhub_backend]
 }
@@ -53,4 +54,31 @@ resource "aws_eip" "ticketea_elastic_ip" {
 resource "aws_eip_association" "ticketea_elastic_ip_association" {
   instance_id   = aws_instance.ticketea_instance.id
   allocation_id = aws_eip.ticketea_elastic_ip.id
+}
+
+resource "aws_iam_role" "ticketea_ec2_role" {
+  name = "ec2-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action    = "sts:AssumeRole",
+        Effect    = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ticketea_ec2_secrets_policy" {
+  role       = aws_iam_role.ticketea_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+}
+
+resource "aws_iam_instance_profile" "ticketea_ec2_profile" {
+  name = "ec2-profile"
+  role = aws_iam_role.ticketea_ec2_role.name
 }

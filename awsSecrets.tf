@@ -1,4 +1,4 @@
-/*resource "aws_secretsmanager_secret" "ticketea_secrets" {
+resource "aws_secretsmanager_secret" "ticketea_secrets" {
   name        = "ticketea-secrets"
   description = "Ticketea secrets"
 
@@ -18,4 +18,4 @@ resource "aws_secretsmanager_secret_version" "ticketea_secrets_version" {
     accessSecret = aws_iam_access_key.ticketea_bucket_user_access_key.secret,
     region = local.aws_region
   })
-}*/
+}

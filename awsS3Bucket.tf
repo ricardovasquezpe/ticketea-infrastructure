@@ -1,4 +1,4 @@
-/*resource "aws_s3_bucket" "ticketea_bucket" {
+resource "aws_s3_bucket" "ticketea_bucket" {
   bucket = var.s3_bucket_name
 }
 
@@ -68,4 +68,4 @@ resource "aws_iam_user_policy" "ticketea_bucket_user_policy" {
 
 resource "aws_iam_access_key" "ticketea_bucket_user_access_key" {
   user = aws_iam_user.ticketea_bucket_user.name
-}*/
+}

@@ -20,6 +20,8 @@ services:
 #      dockerfile: Dockerfile
 #    ports:
 #      - 8080
+#    env_file:
+#      - .env.frontend
 #    expose:
 #      - 8080
 #    networks:
@@ -38,14 +40,14 @@ services:
     depends_on:
       mysqldb:
         condition: service_healthy
-#    env_file:
-#      - .env.backend
-    environment:
-      - MYSQL_HOST=mysqldb
-      - MYSQL_PORT=3306
-      - MYSQL_DATABASE=ticketea
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=4Ev1dHzNfTK9GzG
+    env_file:
+      - .env.backend
+#    environment:
+#      - MYSQL_HOST=mysqldb
+#      - MYSQL_PORT=3306
+#      - MYSQL_DATABASE=ticketea
+#      - MYSQL_USER=root
+#      - MYSQL_PASSWORD=4Ev1dHzNfTK9GzG
     networks:
       - nodejs-mysql-network
   mysqldb:
