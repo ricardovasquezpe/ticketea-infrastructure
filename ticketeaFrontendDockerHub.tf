@@ -1,4 +1,4 @@
-resource "null_resource" "push_to_dockerhub_frontend" {
+/*resource "null_resource" "push_to_dockerhub_frontend" {
   provisioner "local-exec" {
     command = <<-EOT
       docker login -u ${var.dockerhub_username} -p ${var.dockerhub_password} && docker push ${var.dockerhub_username}/${var.dockerhub_project_name_frontend}:latest
@@ -30,4 +30,4 @@ resource "null_resource" "update_frontend_env_file" {
   depends_on = [
     aws_eip.ticketea_elastic_ip
   ]
-}
+}*/
