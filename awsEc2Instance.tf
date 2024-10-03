@@ -54,7 +54,3 @@ resource "aws_eip_association" "ticketea_elastic_ip_association" {
   instance_id   = aws_instance.ticketea_instance.id
   allocation_id = aws_eip.ticketea_elastic_ip.id
 }*/
-
-resource "aws_eip" "ticketea_elastic_ip" {
-  vpc = false
-}
