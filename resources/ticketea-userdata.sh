@@ -3,13 +3,12 @@ sudo apt update
 sudo apt upgrade -y
 
 sudo apt install -y curl unzip
+sudo apt-get install -y jq
+
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
 aws sts get-caller-identity
-
-SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id ticketea-secrets-test --query publicIp --output text --region us-east-2)
-echo "El valor del secreto es: $SECRET_VALUE"
 
 #sudo apt install -y ca-certificates curl gnupg lsb-release
 
@@ -36,10 +35,31 @@ echo "El valor del secreto es: $SECRET_VALUE"
 
 #echo "Start docker-compose!"
 
-#cd home/ubuntu
-#git clone https://github.com/ricardovasquezpe/ticketea-infrastructure.git
-#cd ticketea-infrastructure/resources
+cd home/ubuntu
+git clone https://github.com/ricardovasquezpe/ticketea-infrastructure.git
+cd ticketea-infrastructure/resources
 #docker login -u ricardovasquezpe -p Ajinomoto123@
+
+SECRET_NAME="ticketea-secrets"
+SECRET_JSON=$(aws secretsmanager get-secret-value \
+    --secret-id $SECRET_NAME \
+    --query 'SecretString' \
+    --output text)
+
+PUBLICIP=$(echo $SECRET_JSON | jq -r '.publicIp')
+BUCKETNAME=$(echo $SECRET_JSON | jq -r '.bucketName')
+ACCESSKEY=$(echo $SECRET_JSON | jq -r '.accessKey')
+ACCESSSECRET=$(echo $SECRET_JSON | jq -r '.accessSecret')
+REGION=$(echo $SECRET_JSON | jq -r '.region')
+
+sudo su
+echo "AWS_S3_BUCKET_NAME=$BUCKETNAME" >> .env.backend
+echo "AWS_ACCESS_KEY=$ACCESSKEY" >> .env.backend
+echo "AWS_ACCESS_SECRET=$ACCESSSECRET" >> .env.backend
+echo "AWS_S3_REGION=$REGION" >> .env.backend
+
+echo "VITE_API_URL=$PUBLICIP" >> .env.frontend
+exit
 #docker-compose up -d
 
 #echo "Finish docker-compose!"
