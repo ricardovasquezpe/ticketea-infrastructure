@@ -1,4 +1,4 @@
-/*resource "null_resource" "push_to_dockerhub_frontend" {
+resource "null_resource" "push_to_dockerhub_frontend" {
   provisioner "local-exec" {
     command = <<-EOT
       docker login -u ${var.dockerhub_username} -p ${var.dockerhub_password} && docker push ${var.dockerhub_username}/${var.dockerhub_project_name_frontend}:latest
@@ -16,10 +16,10 @@ resource "docker_image" "ticketea_frontend_image" {
     platform = "linux/amd64"
   }
 
-  depends_on = [null_resource.update_frontend_env_file]
+  //depends_on = [null_resource.update_frontend_env_file]
 }
 
-resource "null_resource" "update_frontend_env_file" {
+/*resource "null_resource" "update_frontend_env_file" {
   provisioner "local-exec" {
     command = <<EOT
       echo "" >> ../ticketea-frontend/.env

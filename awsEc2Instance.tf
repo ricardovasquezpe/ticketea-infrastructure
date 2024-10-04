@@ -37,14 +37,16 @@ resource "aws_security_group" "ticketea_backend_security_group" {
 }
 
 resource "aws_instance" "ticketea_instance" {
-  ami             = local.instance_ami
-  security_groups = [aws_security_group.ticketea_backend_security_group.name]
-  instance_type   = "t2.micro"
-  key_name        = aws_key_pair.ticketea_key.key_name
-  user_data       = file(local.userdata_path)
+  ami                  = local.instance_ami
+  security_groups      = [aws_security_group.ticketea_backend_security_group.name]
+  instance_type        = "t2.micro"
+  key_name             = aws_key_pair.ticketea_key.key_name
+  user_data            = file(local.userdata_path)
   iam_instance_profile = aws_iam_instance_profile.ticketea_ec2_profile.name
 
-  //depends_on = [null_resource.push_to_dockerhub_backend]
+  depends_on = [null_resource.push_to_dockerhub_backend,
+  null_resource.push_to_dockerhub_frontend,
+  aws_secretsmanager_secret_version.ticketea_secrets_version]
 }
 
 resource "aws_eip" "ticketea_elastic_ip" {
@@ -63,8 +65,8 @@ resource "aws_iam_role" "ticketea_ec2_role" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action    = "sts:AssumeRole",
-        Effect    = "Allow",
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
         Principal = {
           Service = "ec2.amazonaws.com"
         }
