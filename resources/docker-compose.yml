@@ -15,9 +15,10 @@ services:
 #      - nodejs-mysql-network
   frontend:
     container_name: frontend
-    build:
-      context: ../ticketea-frontend/
-      dockerfile: Dockerfile
+    image: ricardovasquezpe/ticketea-frontend:latest
+#    build:
+#      context: ../ticketea-frontend/
+#      dockerfile: Dockerfile
     ports:
       - 8080:8080
     env_file:
