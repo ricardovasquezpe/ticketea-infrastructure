@@ -1,0 +1,42 @@
+server {
+    listen 80;
+    server_name ticketea.me;
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 80;
+    server_name www.api.ticketea.me api.ticketea.me;
+    
+    location / {
+        client_max_body_size 100M;
+        return 301 https://www.api.ticketea.me$request_uri; 
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name ticketea.me;
+    ssl_certificate /etc/nginx/certs/www_ticketea_me.crt;
+    ssl_certificate_key /etc/nginx/certs/ticketea.key;
+
+    location / {
+        proxy_pass http://frontend:8080;
+    }
+}
+
+server {
+    server_name www.api.ticketea.me api.ticketea.me;
+
+    listen 443 ssl;
+
+    ssl_certificate /etc/nginx/certs/www_api_ticketea_me.crt;
+    ssl_certificate_key /etc/nginx/certs/api.ticketea.key;
+
+    location / {
+        client_max_body_size 100M;
+        proxy_pass http://backend:3000;
+    }
+}

@@ -1,18 +1,18 @@
 version: '3.7'
 services:
-#  nginx:
-#    image: nginx:1.15-alpine
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    volumes: 
-#      - ./data/nginx:/etc/nginx/conf.d
+  nginx:
+    image: nginx:1.15-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes: 
+      - ./data/nginx:/etc/nginx/conf.d
 #      - ./data/certs:/etc/nginx/certs
-#    depends_on:
-#      - frontend
-#      - backend
-#    networks:
-#      - nodejs-mysql-network
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - nodejs-mysql-network
   frontend:
     container_name: frontend
     image: ricardovasquezpe/ticketea-frontend:latest

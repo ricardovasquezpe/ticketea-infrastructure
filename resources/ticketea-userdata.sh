@@ -58,7 +58,7 @@ echo "AWS_ACCESS_KEY=$ACCESSKEY" >> .env.backend
 echo "AWS_ACCESS_SECRET=$ACCESSSECRET" >> .env.backend
 echo "AWS_S3_REGION=$REGION" >> .env.backend
 
-echo "VITE_API_URL=$PUBLICIP" >> .env.frontend
+echo "VITE_API_URL=http://$PUBLICIP:3000" >> .env.frontend
 
 # LEVANTAR APPS
 docker-compose up -d
