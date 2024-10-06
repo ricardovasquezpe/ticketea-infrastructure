@@ -61,6 +61,6 @@ echo "AWS_S3_REGION=$REGION" >> .env.backend
 # echo "VITE_API_URL=http://$PUBLICIP:3000" >> .env.frontend
 
 # LEVANTAR APPS
-docker-compose up -d
+# docker-compose up -d
 
 echo "Finish docker-compose!"
