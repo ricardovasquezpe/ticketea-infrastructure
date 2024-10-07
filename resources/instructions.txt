@@ -1,5 +1,8 @@
 ssh-keygen -t rsa -b 2048 -f "$PWD/ticketea-key"
-ssh -i "resources/ticketea-key" ubuntu@3.131.156.13
+ssh -i "resources/ticketea-key" ubuntu@3.18.5.104
 cat /var/log/cloud-init-output.log
 
 aws secretsmanager delete-secret --secret-id ticketea-secrets --force-delete-without-recovery --region us-east-2
+
+sudo openssl req -new -newkey rsa:2048 -nodes -keyout www_ticketea_me.key -out www_ticketea_me.csr
+sudo openssl req -new -newkey rsa:2048 -nodes -keyout www_api_ticketea_me.key -out www_api_ticketea_me.csr
