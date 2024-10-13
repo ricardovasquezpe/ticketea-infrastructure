@@ -10,53 +10,97 @@ services:
       - ./data/certs:/etc/nginx/certs
     depends_on:
       - frontend
-      - backend
+      - ms-ticketea-gateway
+      - ms-ticketea-user
+      - ms-ticketea-ticket
     networks:
       - nodejs-mysql-network
   frontend:
     container_name: frontend
     image: ricardovasquezpe/ticketea-frontend:latest
-#    build:
-#      context: ../ticketea-frontend/
-#      dockerfile: Dockerfile
     ports:
       - 8080:8080
     env_file:
       - .env.frontend
-    expose:
-      - 8080
     networks:
       - nodejs-mysql-network
-  backend:
-    container_name: backend
-    image: ricardovasquezpe/ticketea-backend:latest
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
+  ms-ticketea-gateway:
+    container_name: ms-ticketea-gateway
+    image: ricardovasquezpe/ms-ticketea-gateway:latest
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
     ports:
-#      - 3000
       - 3000:3000
-    expose:
-      - 3000
+    depends_on:
+      - ms-ticketea-user
+      - ms-ticketea-ticket
+    environment:
+      - MS_TICKET_HOST=ms-ticketea-ticket
+      - MS_USER_HOST=ms-ticketea-user
+    networks:
+      - nodejs-mysql-network
+  ms-ticketea-user:
+    container_name: ms-ticketea-user
+    image: ricardovasquezpe/ms-ticketea-user:latest
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
     depends_on:
       mysqldb:
         condition: service_healthy
     env_file:
       - .env.backend
-#    environment:
-#      - MYSQL_HOST=mysqldb
-#      - MYSQL_PORT=3306
-#      - MYSQL_DATABASE=ticketea
-#      - MYSQL_USER=root
-#      - MYSQL_PASSWORD=4Ev1dHzNfTK9GzG
+    environment:
+      - MYSQL_HOST=mysqldb
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=ticketea
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=4Ev1dHzNfTK9GzG
+      - TCP_HOST=ms-ticketea-user
+      - MS_TICKET_TCP_HOST=ms-ticketea-ticket
+    networks:
+      - nodejs-mysql-network
+  ms-ticketea-ticket:
+    container_name: ms-ticketea-ticket
+    image: ricardovasquezpe/ms-ticketea-ticket:latest
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    env_file:
+      - .env.backend
+    environment:
+      - MYSQL_HOST=mysqldb
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=ticketea
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=4Ev1dHzNfTK9GzG
+      - TCP_HOST=ms-ticketea-ticket
+      - MS_USER_TCP_HOST=ms-ticketea-user
     networks:
       - nodejs-mysql-network
   mysqldb:
-#    image: mysql
     image: mysql:latest
-#    command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3306:3306
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
     restart: always
     environment:
       - MYSQL_DATABASE=ticketea
