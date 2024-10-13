@@ -10,7 +10,7 @@ services:
       - ./data/certs:/etc/nginx/certs
     depends_on:
       - frontend
-      - ms-ticketea-gateway
+      - backend
       - ms-ticketea-user
       - ms-ticketea-ticket
     networks:
@@ -24,8 +24,8 @@ services:
       - .env.frontend
     networks:
       - nodejs-mysql-network
-  ms-ticketea-gateway:
-    container_name: ms-ticketea-gateway
+  backend:
+    container_name: backend
     image: ricardovasquezpe/ms-ticketea-gateway:latest
     deploy:
       resources:
