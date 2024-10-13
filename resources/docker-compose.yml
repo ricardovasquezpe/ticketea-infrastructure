@@ -22,6 +22,12 @@ services:
   frontend:
     container_name: frontend
     image: ricardovasquezpe/ticketea-frontend:latest
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
     ports:
       - 8080:8080
     env_file:
